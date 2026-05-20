@@ -1,5 +1,5 @@
 # main.py
-def print_menu():
+def print_menu() -> None:
     """
     A function that prints the menu
     on which the entire diet is based
@@ -7,7 +7,7 @@ def print_menu():
     pass
 
 
-def calling_and_running_functions(choice):
+def calling_and_running_functions(choice) -> int:
     """
     Takes the selection and uses it to activate
     the desired function from the menu
@@ -31,7 +31,7 @@ def exit_test():
 
 
 # utils.py
-def receiving_input(choice):
+def receiving_input(choice) -> int:
     """
     A function that receives input from the user
     and runs the health check function
@@ -39,7 +39,7 @@ def receiving_input(choice):
     pass
 
 
-def health_check(typing, choice):
+def health_check(typing: type, choice: int):
     """
     Checking the integrity of the input
     according to the required integrity definition
@@ -47,7 +47,7 @@ def health_check(typing, choice):
     pass
 
 
-def search_by_id():
+def search_by_id(id_number) -> int:
     """
     Search for a soldier by his ID, asks for a number
     and saves it in the variable "id_number"
@@ -56,7 +56,7 @@ def search_by_id():
 
 
 # soldier_manager.py
-def adding_a_soldier():
+def add_soldier():
     """
     A function that adds a soldier to the list of soldiers.
     The function receives an ID number, checks its validity,
