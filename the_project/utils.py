@@ -138,3 +138,41 @@ def is_valid_day(day: str) -> bool:
     פונקציות validation מחזירות bool ולא זורקות exceptions.
     """
     pass
+
+
+def is_valid_choice(choice, test_type):
+    """
+    פונקצייה הבודקת אם מה שהמשתמש הזין תואם למה שהתבקש
+
+    סוג: פונקציית validation (בדיקת תקינות)
+
+    מקבלת:
+    מה שהמשתמש הזין
+    הסוג המשתמש התבקש להזין
+
+    מחזירה:
+        bool: True אם הערך חוקי
+              False אם לא חוקי או אסור (או ערך לא תקין)
+
+    זורקת: כלום - תמיד מחזירה bool
+
+    למה הפונקציה קיימת:
+    בדיקת תקינות של הזנת המשתמש.
+    הפרדה של לוגיקת הבדיקה למקום אחד.
+    פונקציות validation מחזירות bool ולא זורקות exceptions.
+    """
+    if test_type == "1-6_range":
+        if choice in range(1, 7):
+            return True
+        return False
+
+    if test_type == "7 numbers":
+        if len(choice) == 7:
+            return True
+        return False
+
+    if test_type == "name":
+        if choice >= 2 and choice.isalpha:
+            return True
+        return False
+    return False
