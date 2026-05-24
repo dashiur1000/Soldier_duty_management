@@ -1,4 +1,6 @@
-def add_duty_to_soldier(soldier_id: int, duty_name: str, day: str) -> None:
+from utils import find_soldier_by_id, find_duty_by_name, is_valid_status
+
+def add_duty_to_soldier(soldier_id: int, duty_name: str, day: str, data) -> None:
     """
     מוסיפה תורנות חדשה לחייל.
 
@@ -22,10 +24,25 @@ def add_duty_to_soldier(soldier_id: int, duty_name: str, day: str) -> None:
     מבצעת בדיקות ומוסיפה תורנות לחייל.
     זורקת exceptions במקרה של שגיאה במקום להחזיר False.
     """
-    pass
+    soldier = find_soldier_by_id(soldier_id, data)
+
+    if soldier is None:
+        raise KeyError("soldier not found")
+
+    new_dict = {"name": duty_name,
+                "day": day,
+                "status": "pending"}
+
+    if find_duty_by_name(data, duty_name) != False:
+
+        for item in data:
+            if item["id"] == soldier_id:
+                item["duties"].append(new_dict)
+                print("Added a turn!")
 
 
-def update_duty_status(soldier_id: int, duty_name: str, new_status: str) -> None:
+
+def update_duty_status(soldier_id: int, duty_name: str, new_status: str, data) -> None:
     """
     מעדכנת את הסטטוס של תורנות.
 
@@ -49,10 +66,24 @@ def update_duty_status(soldier_id: int, duty_name: str, new_status: str) -> None
     מבצעת בדיקות ומעדכנת את הסטטוס.
     זורקת exceptions במקרה של שגיאה במקום להחזיר False.
     """
-    pass
+    soldier = find_soldier_by_id(soldier_id, data)
+    if soldier is None:
+        raise KeyError("KeyError")
+
+    if not is_valid_status(new_status):
+        raise ValueError("ValueError! it is not valid!")
+
+    found = False
+    for duty in soldier["duties"]:
+        if duty["name"] == duty_name:
+            duty["status"] = new_status
+            found = True
+
+    if not found:
+        raise KeyError("KeyError! not found!")
 
 
-def get_soldier_duties(soldier_id: int) -> list:
+def get_soldier_duties(soldier_id: int, data) -> list:
     """
     מחזירה את רשימת התורנויות של חייל.
 
@@ -73,4 +104,6 @@ def get_soldier_duties(soldier_id: int) -> list:
     מפרידה בין הנתונים לבין הגישה אליהם.
     זורקת exception אם החייל לא קיים (במקום להחזיר רשימה ריקה).
     """
-    pass
+    for item in data:
+        if item["id"] == soldier_id:
+            return item["duties"]

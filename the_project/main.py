@@ -2,8 +2,9 @@
 # https://github.com/dashiur1000/Soldier_duty_management
 
 import the_project.data
-from utils import is_valid_choice, find_soldier_by_id
+from utils import is_valid_choice, find_soldier_by_id, is_valid_day, is_valid_status, is_valid_name
 from soldier_manager import get_all_soldiers, add_soldier, remove_soldier
+from duty_manager import get_soldier_duties, add_duty_to_soldier,update_duty_status
 
 
 data_file = the_project.data.soldiers_list
@@ -90,10 +91,17 @@ def handle_remove_soldier() -> None:
     if is_valid_choice(remove_soldier_id, "7 numbers"):
         remove_soldier_name = get_user_choice("name")
         if is_valid_choice(remove_soldier_name, "name"):
-            if find_soldier_by_id(int(remove_soldier_id), data_file):
-                remove_soldier(int(remove_soldier_id), data_file)
-                print("The soldier was successfully deleted!")
-                exit_from_program()
+            if is_valid_name(remove_soldier_name):
+                if find_soldier_by_id(int(remove_soldier_id), data_file):
+                    remove_soldier(int(remove_soldier_id), data_file)
+                    print("The soldier was successfully deleted!")
+                    exit_from_program()
+                else:
+                    raise ValueError("ValueError! id not found!")
+            else:
+                raise ValueError("ValueError! this name is not valid!")
+        else:
+            raise ValueError("ValueError! this name is not valid!")
 
 
 def handle_view_soldiers() -> None:
@@ -122,7 +130,21 @@ def handle_add_duty() -> None:
     למה הפונקציה קיימת:
     הפרדה בין UI לבין לוגיקה עסקית.
     """
-    pass
+    try:
+        soldier_id = get_user_choice("id_number")
+        if is_valid_choice(soldier_id, "7 numbers"):
+            if find_soldier_by_id(int(soldier_id), data_file):
+                duty_name = get_user_choice("duty_name")
+                if is_valid_choice(duty_name, "name"):
+                    day = get_user_choice("day")
+                    if is_valid_choice(day, "name"):
+                        if is_valid_day(day):
+                            add_duty_to_soldier(int(soldier_id), duty_name, day, data_file)
+                            print("Soldier duty has been successfully added!")
+    except ValueError as e:
+        print(e)
+
+
 
 
 def handle_update_duty_status() -> None:
@@ -136,7 +158,24 @@ def handle_update_duty_status() -> None:
     למה הפונקציה קיימת:
     הפרדה בין UI לבין לוגיקה עסקית.
     """
-    pass
+    try:
+        soldier_id = get_user_choice("id_number")
+        if is_valid_choice(soldier_id, "7 numbers"):
+            if find_soldier_by_id(int(soldier_id), data_file):
+                duty_name = get_user_choice("duty_name")
+                if is_valid_choice(duty_name, "name"):
+                    day = get_user_choice("day")
+                    if is_valid_choice(day, "name"):
+                        if is_valid_day(day):
+                            new_status = get_user_choice("new status")
+                            if is_valid_status(new_status):
+                                update_duty_status(int(soldier_id), duty_name, new_status, data_file)
+                                print("Duty status has been updated successfully!")
+
+    except:
+        raise ValueError("ValueError! try again!")
+
+
 
 
 def handle_view_soldier_duties() -> None:
@@ -150,18 +189,30 @@ def handle_view_soldier_duties() -> None:
     למה הפונקציה קיימת:
     הפרדה בין UI לבין לוגיקה עסקית.
     """
-    pass
+    id_soldier = get_user_choice("id_number")
+    if is_valid_choice(id_soldier, "7 numbers"):
+        print(get_soldier_duties(int(id_soldier), data_file))
+        exit_from_program()
+
+
+
 
 
 def exit_from_program():
     print("Do you want to log out?")
-    choice = get_user_choice("yes or no")
-    is_valid_choice(choice, "yes or no")
-    if choice == "yes":
-        print("You are logged out!")
-        exit()
-    else:
-        return is_true
+    a = True
+    while a == True:
+        choice = get_user_choice("yes or no")
+        if is_valid_choice(choice, "yes or no"):
+            if choice == "yes":
+                print("You are logged out!")
+                exit()
+            else:
+                a = False
+                return is_true
+        a = True
+
+
 
 
 def main() -> None:

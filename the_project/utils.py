@@ -44,7 +44,10 @@ def find_duty_by_name(duties: list, duty_name: str) -> dict | None:
     הפרדה של לוגיקת החיפוש למקום אחד.
     מחזירה None במקום לזרוק exception - מאפשרת גמישות.
     """
-    pass
+    for item in duties:
+        if duty_name in item:
+            return item
+    return None
 
 
 def is_valid_status(status: str) -> bool:
@@ -68,7 +71,9 @@ def is_valid_status(status: str) -> bool:
     גם מקל על שינוי הסטטוסים החוקיים בעתיד.
     פונקציות validation מחזירות bool ולא זורקות exceptions.
     """
-    pass
+    if status in ["pending", "completed", "missed"]:
+        return True
+    raise ValueError("ValueError")
 
 
 def is_valid_name(name: str) -> bool:
@@ -92,7 +97,11 @@ def is_valid_name(name: str) -> bool:
     בעתיד אפשר להוסיף בדיקות נוספות (אורך מינימלי, תווים חוקיים).
     פונקציות validation מחזירות bool ולא זורקות exceptions.
     """
-    pass
+    name = name.lower()
+    name_without_space = name.replace(" ", "")
+    if len(name) >= 2 and name_without_space.isalpha():
+        return True
+    return False
 
 
 def soldier_has_duty(soldier: dict, duty_name: str) -> bool:
@@ -116,7 +125,10 @@ def soldier_has_duty(soldier: dict, duty_name: str) -> bool:
     הפרדה של הלוגיקה למקום אחד.
     פונקציות validation מחזירות bool ולא זורקות exceptions.
     """
-    pass
+    for key, value in soldier.items():
+        if value == duty_name:
+            return True
+    return False
 
 
 def is_valid_day(day: str) -> bool:
@@ -142,7 +154,7 @@ def is_valid_day(day: str) -> bool:
     """
     if day in ["sunday", "monday", "tuesday", "wednesday", "thursday"]:
         return True
-    return False
+    raise ValueError("ValueError")
 
 
 def is_valid_choice(choice, test_type):
@@ -182,11 +194,13 @@ def is_valid_choice(choice, test_type):
             name_without_space = choice.replace(" ", "")
             if len(choice) >= 2 and name_without_space.isalpha():
                 return True
-            print("ValueError")
+            raise ValueError("ValueError")
 
-        elif test_type == "yes or not":
-            if choice in ["yes", "not"]:
+        elif test_type == "yes or no":
+            if choice in ["yes", "no"]:
                 return True
+            raise ValueError("ValueError")
+
     except ValueError as e:
         print(e)
         return False
