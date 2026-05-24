@@ -1,6 +1,6 @@
 soldiers_list = [
     {
-        "id": 3366985,
+        "id": 3223827,
         "name": "David Stern",
         "duties": [
             {

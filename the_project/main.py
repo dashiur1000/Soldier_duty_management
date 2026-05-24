@@ -1,8 +1,10 @@
 import the_project.data
 from utils import is_valid_choice, find_soldier_by_id
+from soldier_manager import get_all_soldiers, add_soldier, remove_soldier
 
 
 data_file = the_project.data.soldiers_list
+is_true = True
 
 
 def show_menu() -> None:
@@ -19,13 +21,13 @@ def show_menu() -> None:
     print("==========================================\n"
         "Welcome to the unit's central duty system!\n"
             "==========================================\n"
-            "Here is a menu for selecting an action\n"
-            "Adding a new soldier type 1\n"
-            "Removing a soldier type 2\n"
-            "Viewing the list of soldiers type 3\n"
-            "Adding a duty to a soldier type 4\n"
-            "Update and mark duty status type 5\n"
-            "Printing soldier duty type 6")
+            "  Here is a menu for selecting an action:\n"
+            "Adding a new soldier type..............(1)\n"
+            "Removing a soldier type................(2)\n"
+            "Viewing the list of soldiers type......(3)\n"
+            "Adding a duty to a soldier type........(4)\n"
+            "Update and mark duty status type.......(5)\n"
+            "Printing soldier duty type.............(6)")
 
 def get_user_choice(message) -> str:
     """
@@ -38,8 +40,8 @@ def get_user_choice(message) -> str:
     הפרדת קבלת קלט מהמשתמש מהלוגיקה של עיבוד הבחירה.
     מאפשר להחליף את שיטת הקלט בעתיד (למשל, GUI).
     """
-    choice = input(f"Enter your choice ({message}): ")
-    return choice
+    choice = input(f"Enter your {message}: ")
+    return str(choice)
 
 
 
@@ -56,18 +58,15 @@ def handle_add_soldier() -> None:
     main.py אחראי על אינטראקציה עם המשתמש,
     soldier_manager.py אחראי על הלוגיקה.
     """
-    new_soldier = get_user_choice("id_number")
-    new_soldier = is_valid_choice(new_soldier, "7 numbers")
-    if find_soldier_by_id(new_soldier):
-        new_soldier_name = get_user_choice("name")
-        data_file.append({"id": new_soldier,
-        "name": new_soldier_name,
-        "duties": [{"name": "guard duty",
-                "day": "sunday",
-                "status": "completed"},
-            {"name": "kitchen duty",
-                "day": "wednesday",
-                "status": "pending"}]})
+    new_soldier_id = get_user_choice("id_number")
+    if is_valid_choice(new_soldier_id, "7 numbers"):
+        if find_soldier_by_id(int(new_soldier_id), data_file) == None:
+            new_soldier_name = get_user_choice("name")
+            if is_valid_choice(new_soldier_name, "name"):
+                add_soldier(int(new_soldier_id), new_soldier_name, data_file)
+                print(data_file)
+                exit_from_program()
+    return None
 
 
 
@@ -84,14 +83,14 @@ def handle_remove_soldier() -> None:
     למה הפונקציה קיימת:
     הפרדה בין UI לבין לוגיקה עסקית.
     """
-    remove_soldier = get_user_choice("id_number")
-    if is_valid_choice(remove_soldier, "7 numbers"):
-        if find_soldier_by_id(remove_soldier):
-            remove_soldier_name = get_user_choice("name")
-            for names in data_file:
-                if data_file["name"] == remove_soldier_name:
-                    data_file.remove(names)
-                    print("The soldier was successfully deleted!")
+    remove_soldier_id = get_user_choice("id_number")
+    if is_valid_choice(remove_soldier_id, "7 numbers"):
+        remove_soldier_name = get_user_choice("name")
+        if is_valid_choice(remove_soldier_name, "name"):
+            if find_soldier_by_id(int(remove_soldier_id), data_file):
+                remove_soldier(int(remove_soldier_id), data_file)
+                print("The soldier was successfully deleted!")
+                exit_from_program()
 
 
 def handle_view_soldiers() -> None:
@@ -105,7 +104,8 @@ def handle_view_soldiers() -> None:
     למה הפונקציה קיימת:
     הפרדה בין קבלת הנתונים לבין הצגתם.
     """
-    pass
+    get_all_soldiers(data_file)
+    exit_from_program()
 
 
 def handle_add_duty() -> None:
@@ -151,7 +151,14 @@ def handle_view_soldier_duties() -> None:
 
 
 def exit_from_program():
-    return exit()
+    print("Do you want to log out?")
+    choice = get_user_choice("yes or no")
+    is_valid_choice(choice, "yes or no")
+    if choice == "yes":
+        print("You are logged out!")
+        exit()
+    else:
+        return is_true
 
 
 def main() -> None:
@@ -165,24 +172,22 @@ def main() -> None:
     למה הפונקציה קיימת:
     נקודת הכניסה לתוכנית. מנהלת את הזרימה הראשית.
     """
-    show_menu()
-    choice = int(get_user_choice("number"))
-    if is_valid_choice(choice, "1-6_range"):
-        if choice == 1:
-            handle_add_soldier()
-        elif choice == 2:
-            handle_remove_soldier()
-        elif choice == 3:
-            handle_view_soldiers()
-        elif choice == 4:
-            handle_add_duty()
-        elif choice == 5:
-            handle_update_duty_status()
-        else:
-            handle_view_soldier_duties()
-    else:
-        exit_from_program()
-
+    while is_true == True:
+        show_menu()
+        choice = (get_user_choice("number"))
+        if is_valid_choice(choice, "1-6_range"):
+            if choice == "1":
+                handle_add_soldier()
+            elif choice == "2":
+                handle_remove_soldier()
+            elif choice == "3":
+                handle_view_soldiers()
+            elif choice == "4":
+                handle_add_duty()
+            elif choice == "5":
+                handle_update_duty_status()
+            else:
+                handle_view_soldier_duties()
 
 
 if __name__ == "__main__":

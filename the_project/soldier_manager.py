@@ -1,4 +1,4 @@
-def add_soldier(soldier_id: int, name: str) -> None:
+def add_soldier(soldier_id: int, name: str, data) -> None:
     """
     מוסיפה חייל חדש למערכת.
 
@@ -21,10 +21,11 @@ def add_soldier(soldier_id: int, name: str) -> None:
     לא מטפלת בקלט/פלט - רק בלוגיקה.
     זורקת exceptions במקרה של שגיאה במקום להחזיר False.
     """
-    pass
+    new_soldier = {"id": soldier_id, "name": name}
+    data.append(new_soldier)
 
 
-def remove_soldier(soldier_id: int) -> None:
+def remove_soldier(soldier_id: int, data) -> None:
     """
     מסירה חייל מהמערכת לפי id.
 
@@ -44,10 +45,14 @@ def remove_soldier(soldier_id: int) -> None:
     מבצעת בדיקת קיום ומסירה מהנתונים.
     זורקת exception במקרה שהחייל לא קיים.
     """
-    pass
+    for item in data:
+        if item["id"] == soldier_id:
+            data.remove(item)
+            return
+    raise KeyError("Soldier not found!")
 
 
-def get_all_soldiers() -> list:
+def get_all_soldiers(data) -> list:
     """
     מחזירה את רשימת כל החיילים במערכת.
 
@@ -65,4 +70,7 @@ def get_all_soldiers() -> list:
     גישה לנתונים בצורה מבוקרת.
     מאפשר לקבל את הנתונים מבלי לגשת ישירות למשתנה הגלובלי.
     """
-    pass
+    data_list = []
+    for item in data:
+        print(item)
+    return data

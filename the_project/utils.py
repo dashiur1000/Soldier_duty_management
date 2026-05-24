@@ -1,4 +1,4 @@
-def find_soldier_by_id(soldier_id: int) -> dict | None:
+def find_soldier_by_id(soldier_id: int, data, is_true = True) -> dict | None:
     """
     מחפשת חייל לפי id ומחזירה אותו.
 
@@ -18,7 +18,10 @@ def find_soldier_by_id(soldier_id: int) -> dict | None:
     יש פונקציה אחת שעושה את זה.
     מחזירה None במקום לזרוק exception - מאפשרת גמישות.
     """
-    pass
+    for item in data:
+        if item["id"] != int(soldier_id):
+            continue
+        return item
 
 
 def find_duty_by_name(duties: list, duty_name: str) -> dict | None:
@@ -137,7 +140,9 @@ def is_valid_day(day: str) -> bool:
     בעתיד אפשר לשנות את הימים החוקיים במקום אחד.
     פונקציות validation מחזירות bool ולא זורקות exceptions.
     """
-    pass
+    if day in ["sunday", "monday", "tuesday", "wednesday", "thursday"]:
+        return True
+    return False
 
 
 def is_valid_choice(choice, test_type):
@@ -161,18 +166,29 @@ def is_valid_choice(choice, test_type):
     הפרדה של לוגיקת הבדיקה למקום אחד.
     פונקציות validation מחזירות bool ולא זורקות exceptions.
     """
-    if test_type == "1-6_range":
-        if choice in range(1, 7):
-            return True
+    try:
+        if test_type == "1-6_range":
+            if choice in ["1", "2", "3", "4", "5", "6"]:
+                return True
+            print("ValueError")
+
+        elif test_type == "7 numbers":
+            if int(len(choice)) == 7 and choice.isdigit():
+                return True
+            print("ValueError")
+
+        elif test_type == "name":
+            choice = choice.lower()
+            name_without_space = choice.replace(" ", "")
+            if len(choice) >= 2 and name_without_space.isalpha():
+                return True
+            print("ValueError")
+
+        elif test_type == "yes or not":
+            if choice in ["yes", "not"]:
+                return True
+    except ValueError as e:
+        print(e)
         return False
 
-    if test_type == "7 numbers":
-        if len(choice) == 7:
-            return True
-        return False
-
-    if test_type == "name":
-        if choice >= 2 and choice.isalpha:
-            return True
-        return False
     return False
