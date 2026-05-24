@@ -1,3 +1,6 @@
+# Link to GitHub:
+# https://github.com/dashiur1000/Soldier_duty_management
+
 import the_project.data
 from utils import is_valid_choice, find_soldier_by_id
 from soldier_manager import get_all_soldiers, add_soldier, remove_soldier
